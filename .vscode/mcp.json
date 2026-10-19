@@ -1,0 +1,16 @@
+{
+	"servers": {
+		"open-meteo-weather": {
+			"type": "stdio",
+			"command": "go",
+			"args": [
+				"run",
+				"C:\\Users\\eduar\\mcp"
+			],
+			"env": {
+				"WEATHER_MCP_LOG_FILE": "C:\\Users\\eduar\\mcp\\weather-mcp.log"
+			}
+		}
+	},
+	"inputs": []
+}
