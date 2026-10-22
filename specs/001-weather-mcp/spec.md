@@ -47,6 +47,10 @@ without requiring me to know the place's coordinates.
     completion to stderr so logs do not corrupt the MCP protocol stream.
 11. When `WEATHER_MCP_LOG_FILE` is set, the server MUST also append those logs
     to the configured file while continuing to write them to stderr.
+12. For each Open-Meteo API call, the server MUST log the HTTP method and URL
+    and the raw response body. Since these APIs use GET requests, request
+    parameters MUST be represented by the logged URL; no JSON request body is
+    sent. Error response bodies MUST remain bounded when read and logged.
 
 ## Quality requirements
 

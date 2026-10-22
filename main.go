@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -163,6 +164,9 @@ func fetchJSON[T any](ctx context.Context, endpoint string) (T, error) {
 	if err != nil {
 		return result, fmt.Errorf("create API request: %w", err)
 	}
+	// Open-Meteo uses GET query parameters rather than a JSON request body, so
+	// logging the URL captures the API request parameters.
+	log.Printf("API request: %s %s", req.Method, req.URL)
 	// Execute the request using the shared client (which enforces its timeout).
 	resp, err := httpClient.Do(req)
 	if err != nil {
@@ -171,17 +175,23 @@ func fetchJSON[T any](ctx context.Context, endpoint string) (T, error) {
 	// Always close the response body to release network resources.
 	defer resp.Body.Close()
 
-	// HTTP 2xx status codes indicate success. For an error response, read at
-	// most 4 KB so an unexpectedly large response cannot consume unbounded memory.
+	// Read at most 4 KB from an error response so it cannot consume unbounded
+	// memory; successful API responses are decoded and logged in full.
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
 		body, readErr := io.ReadAll(io.LimitReader(resp.Body, 4096))
 		if readErr != nil {
 			return result, fmt.Errorf("API returned HTTP %d and its error response could not be read: %w", resp.StatusCode, readErr)
 		}
+		log.Printf("API response: HTTP %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
 		return result, fmt.Errorf("API returned HTTP %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
 	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return result, fmt.Errorf("read API response: %w", err)
+	}
+	log.Printf("API response: HTTP %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
 	// Decode the successful JSON response directly into the caller's chosen T.
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.NewDecoder(bytes.NewReader(body)).Decode(&result); err != nil {
 		return result, fmt.Errorf("decode API response: %w", err)
 	}
 	// Return the populated value and nil to indicate success.

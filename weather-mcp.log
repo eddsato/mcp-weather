@@ -8,3 +8,13 @@
 2026/10/16 22:12:54 get_current_weather forecast failed for "London": API returned HTTP 503: {"reason":"The service is overloaded","error":true}
 2026/10/16 22:12:55 get_current_weather request received for "London, United Kingdom"
 2026/10/16 22:13:00 get_current_weather completed for "London" in 4.229s
+2026/10/22 19:12:41 starting open-meteo-weather MCP server over stdio
+2026/10/22 19:14:41 get_current_weather request received for "São Paulo, Brazil"
+2026/10/22 19:14:43 get_current_weather completed for "São Paulo" in 1.814s
+2026/10/22 19:16:36 starting open-meteo-weather MCP server over stdio
+2026/10/22 19:16:54 get_current_weather request received for "São Paulo, Brazil"
+2026/10/22 19:16:54 API request: GET https://geocoding-api.open-meteo.com/v1/search?count=1&format=json&language=en&name=S%C3%A3o+Paulo%2C+Brazil
+2026/10/22 19:16:55 API response: HTTP 200: {"results":[{"id":3448439,"name":"São Paulo","latitude":-23.5475,"longitude":-46.63611,"elevation":769.0,"feature_code":"PPLA","country_code":"BR","admin1_id":3448433,"timezone":"America/Sao_Paulo","population":12400232,"postcodes":["82010-340","22640-101"],"country_id":3469034,"country":"Brazil","admin1":"São Paulo"}],"generationtime_ms":0.1538992}
+2026/10/22 19:16:55 API request: GET https://api.open-meteo.com/v1/forecast?current=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cwind_speed_10m%2Cweather_code&latitude=-23.5475&longitude=-46.63611&temperature_unit=celsius&timezone=auto&wind_speed_unit=kmh
+2026/10/22 19:16:56 API response: HTTP 200: {"latitude":-23.514938,"longitude":-46.610504,"generationtime_ms":0.10132789611816406,"utc_offset_seconds":-10800,"timezone":"America/Sao_Paulo","timezone_abbreviation":"GMT-3","elevation":745.0,"current_units":{"time":"iso8601","interval":"seconds","temperature_2m":"°C","apparent_temperature":"°C","relative_humidity_2m":"%","wind_speed_10m":"km/h","weather_code":"wmo code"},"current":{"time":"2026-10-22T19:00","interval":900,"temperature_2m":19.1,"apparent_temperature":20.6,"relative_humidity_2m":88,"wind_speed_10m":6.8,"weather_code":3}}
+2026/10/22 19:16:56 get_current_weather completed for "São Paulo" in 1.771s

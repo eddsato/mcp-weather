@@ -29,6 +29,9 @@ go run .
 The terminal prints a startup log and then waits for an MCP client. Press
 `Ctrl+C` to stop it. When a client invokes the weather tool, request, error, and
 completion logs are written to stderr and appear in the terminal.
+Each Open-Meteo API call also logs its GET URL and raw response body, including
+error responses. The APIs use query parameters instead of a JSON request body,
+so the logged URL contains the request parameters.
 
 The stdio protocol requires a client to communicate with the process through
 its input and output streams; typing a weather request into the terminal will
