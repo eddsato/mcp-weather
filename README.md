@@ -1,8 +1,9 @@
 # Open-Meteo Weather MCP Server
 
 A small Go MCP server that provides a `get_current_weather` tool. It resolves a
-city or place with the Open-Meteo Geocoding API, then retrieves current weather
-from the Open-Meteo Forecast API. No API key is required.
+city or place with the Open-Meteo Geocoding API and returns today's weather
+forecast. If the user wants more, Copilot can call the same tool again for a
+seven-day forecast. No API key is required.
 
 ## Requirements
 
@@ -29,6 +30,7 @@ go run .
 The terminal prints a startup log and then waits for an MCP client. Press
 `Ctrl+C` to stop it. When a client invokes the weather tool, request, error, and
 completion logs are written to stderr and appear in the terminal.
+
 Each Open-Meteo API call also logs its GET URL and raw response body, including
 error responses. The APIs use query parameters instead of a JSON request body,
 so the logged URL contains the request parameters.
@@ -70,5 +72,14 @@ needs Go installed and network access to the Open-Meteo APIs.
 ## Tool
 
 `get_current_weather` accepts a `location` string (for example, `"Lisbon"`) and
-returns the resolved location, country when available, temperature, apparent
-temperature, relative humidity, wind speed, and WMO weather code.
+returns current conditions and today's forecast. Its response includes a
+`follow_up_question` asking whether the user wants the seven-day forecast.
+After the user agrees, Copilot should call the same tool with the same location
+and `include_seven_day_forecast: true`. The second response includes the
+seven-day daily forecast (temperature range, precipitation probability, and
+WMO weather code). The tool does not ask the user directly; Copilot presents
+the follow-up question from the tool response.
+
+Each invocation makes two sequential API requests: geocoding resolves the
+place, and its coordinates are sent to the forecast API. Air quality is not
+requested in this flow.
